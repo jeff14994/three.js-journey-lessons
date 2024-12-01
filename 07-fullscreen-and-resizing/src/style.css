@@ -1,0 +1,19 @@
+/* remove the white margin */
+* 
+{
+    margin: 0;
+    padding: 0;
+}
+
+/* remove the scroll bar */
+.webgl {
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* remove the blue outline */
+    outline: none;
+}
+/* prevent user scroll beyond limit when using trackpad */
+html, body {
+    overflow: hidden;
+}

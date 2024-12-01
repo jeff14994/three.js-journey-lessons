@@ -22,10 +22,27 @@ scene.add(mesh)
  * Sizes
  */
 const sizes = {
-    width: 800,
-    height: 600
+    // width: 800,
+    // height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
+// Resize the window when user is toggling the window
+window.addEventListener('resize', () => {
+    console.log('windows has been resized')
 
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
+
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+
+})
 /**
  * Camera
  */
@@ -45,6 +62,7 @@ const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
 renderer.setSize(sizes.width, sizes.height)
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
  * Animate
@@ -66,3 +84,26 @@ const tick = () =>
 }
 
 tick()
+
+// enable fullscreen mode by double clicking
+window.addEventListener('dblclick', () => {
+
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement
+    if (!fullscreenElement) {
+        if (canvas.requestFullscreen) {
+            console.log('go fullscreen')
+            canvas.requestFullscreen()
+        } else {
+            canvas.webkitRequestFullscreen()
+        }
+        
+    } else {
+        if (document.exitFullscreen) {
+            console.log('leave fullscreen')
+            document.exitFullscreen()
+        } else {
+            document.webkitExitFullscreen()
+        }
+        
+    }
+})
