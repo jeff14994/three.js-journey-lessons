@@ -65,6 +65,9 @@ const generateGalaxy = () => {
         positions[i3 + 1] = randomY
         positions[i3 + 2] = radius * Math.sin(branchAngle + spinAngle) + randomZ
 
+        // positions2[i3 + 0] = radius * Math.cos(branchAngle + spinAngle) + randomX * 2
+        // positions2[i3 + 1] = randomY * 2
+        // positions2[i3 + 2] = radius * Math.sin(branchAngle + spinAngle) + randomZ * 2
         // Color
         const mixedColor = colorInside.clone()
         // Mix the inside color and the outside color
@@ -95,6 +98,74 @@ const generateGalaxy = () => {
     scene.add(points)
 }
 generateGalaxy()
+const generateGalaxy2 = () => {
+    console.log('Generate the galaxy')
+    // Remove the previous variables
+    // Destroy old galaxy
+    // if(points !== null) {
+    //     geometry.dispose()
+    //     material.dispose()
+    //     scene.remove(points)
+    // }
+    /**
+     * Geometry
+     */
+    geometry = new THREE.BufferGeometry()
+    const positions = new Float32Array(parameters.count * 3)
+    const colors = new Float32Array(parameters.count * 3)
+    const colorInside = new THREE.Color(parameters.insideColor)
+    const colorOutside = new THREE.Color(parameters.outsideColor)
+    for(let i = 0; i < parameters.count; i++) {
+        const i3 = i * 3
+
+        // Position
+        const radius = Math.random() * parameters.radius * 1.5
+        // Control the galaxy arm spin
+        const spinAngle = radius * parameters.spin
+        const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
+        
+        // (Math.random() < 0.5 ? 1: -1)  is to make it to be at positive and negative in the coordination system
+        const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1: -1) 
+        const randomY = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1: -1)
+        const randomZ = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1: -1)
+        
+        positions[i3 + 0] = radius * Math.cos(branchAngle + spinAngle) + randomX
+        positions[i3 + 1] = randomY
+        positions[i3 + 2] = radius * Math.sin(branchAngle + spinAngle) + randomZ
+
+        // positions2[i3 + 0] = radius * Math.cos(branchAngle + spinAngle) + randomX * 2
+        // positions2[i3 + 1] = randomY * 2
+        // positions2[i3 + 2] = radius * Math.sin(branchAngle + spinAngle) + randomZ * 2
+        // Color
+        const mixedColor = colorInside.clone()
+        // Mix the inside color and the outside color
+        mixedColor.lerp(colorOutside, radius / parameters.radius)
+
+        colors[i3 + 0] = mixedColor.r
+        colors[i3 + 1] = mixedColor.g
+        colors[i3 + 2] = mixedColor.b
+    }
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+    /**
+     * Material
+     */
+    material = new THREE.PointsMaterial({
+        size: parameters.size,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        // color: '#ff5588'
+        vertexColors: true
+    })
+
+    /**
+     * Points
+     */
+    points = new THREE.Points(geometry, material)
+    scene.add(points)
+}
+generateGalaxy2()
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
 gui.add(parameters, 'size').min(0.001).max(0.1).step(0.001).onFinishChange(generateGalaxy)
 gui.add(parameters, 'radius').min(0.001).max(20).step(0.01).onFinishChange(generateGalaxy)
