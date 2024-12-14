@@ -164,6 +164,8 @@ const generateGalaxy2 = () => {
      */
     points = new THREE.Points(geometry, material)
     scene.add(points)
+    // Move the galaxy 1.5 units along the x-axis
+    points.position.x += 3;
 }
 generateGalaxy2()
 gui.add(parameters, 'count').min(100).max(1000000).step(100).onFinishChange(generateGalaxy)
