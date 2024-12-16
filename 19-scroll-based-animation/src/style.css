@@ -3,12 +3,14 @@
     margin: 0;
     padding: 0;
 }
-
-html,
-body
+html {
+    background: #1e1a20
+}
+/* html, */
+/* body
 {
     overflow: hidden;
-}
+} */
 
 .webgl
 {
@@ -33,7 +35,7 @@ body
     padding-right: 10%;
 }
 
-section:nth-child(odd)
+section:nth-child(even)
 {
     justify-content: flex-end;
 }
