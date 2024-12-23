@@ -68,7 +68,7 @@ gltfLoader.load(
         console.log(gltf)
         // Make the fox run
         mixer = new THREE.AnimationMixer(gltf.scene)
-        const action = mixer.clipAction(gltf.animations[])
+        const action = mixer.clipAction(gltf.animations[1])
         action.play()
 
         gltf.scene.scale.set(0.025, 0.025, 0.025)
